@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class LineRender : MonoBehaviour
 {
-    public Vector3[] LinePoints;
-    public LineRenderer BulletLine;
-    public GameObject Butllet;
-    public BulletController moveByTime;
-    public Vector3 MouseDownPos, MouseUpPos;
-    public Vector3 Velocity;
-    public float PointTime;
+    [SerializeField] private Vector3[] LinePoints;
+    [SerializeField] private LineRenderer BulletLine;
+    [SerializeField] private float PointTime;
     private Vector3 Gravity = new Vector3(0, -10, 0);
     // Start is called before the first frame update
     void Start()

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class cubemove : MonoBehaviour
 {
-    public float DropVelocity;
-    public Rigidbody2D Mybd;
-    public float StopDropAt;
-    public Vector3 BeginPos;
+    [SerializeField] private float DropVelocity;
+    [SerializeField] private Rigidbody2D Mybd;
+    [SerializeField] private float StopDropAt;
+    [SerializeField] private Vector3 BeginPos;
 
     // Start is called before the first frame update
     void Start()

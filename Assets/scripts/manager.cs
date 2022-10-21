@@ -9,9 +9,9 @@ public class manager : MonoBehaviour
     public GameState gameState;
     [Header("UI")]
     public static manager Instance;
-    public TextMeshProUGUI PointText;
+    [SerializeField] private TextMeshProUGUI PointText;
     public float Point;
-    public GameObject Cube;
+    [SerializeField] private GameObject Cube;
     // Start is called before the first frame update
     void Start()
     {

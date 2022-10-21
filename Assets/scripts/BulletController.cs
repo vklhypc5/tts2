@@ -5,12 +5,12 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
     public enum BulletState {Pull,Fly,StandStill}
-    public BulletState MyState;
-    public Vector3 StartPos, EndPos, BeginPos;
-    public Vector3 Velocity;
-    public float Times;
-    public GameObject DestroyEffect;
-    public LineRender BulletLine;
+    [SerializeField] private BulletState MyState;
+    [SerializeField] private Vector3 StartPos, EndPos, BeginPos;
+    [SerializeField] private Vector3 Velocity;
+    [SerializeField] private float Times;
+    [SerializeField] private GameObject DestroyEffect;
+    [SerializeField] private LineRender BulletLine;
     private Vector3 Gravity= new Vector3(0,-10,0);
     // Start is called before the first frame update
     void Start()
