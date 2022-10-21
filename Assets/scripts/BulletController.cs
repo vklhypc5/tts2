@@ -8,13 +8,15 @@ public class BulletController : MonoBehaviour
     [SerializeField] private BulletState MyState;
     [SerializeField] private Vector3 StartPos, EndPos, BeginPos;
     [SerializeField] private Vector3 Velocity;
-    [SerializeField] private float Times;
+    [SerializeField] private float Times,FramesBeforeCollide;
     [SerializeField] private GameObject DestroyEffect;
     [SerializeField] private LineRender BulletLine;
     private Vector3 Gravity= new Vector3(0,-10,0);
+    private float ColliderRadius;
     // Start is called before the first frame update
     void Start()
     {
+        ColliderRadius = GetComponent<SphereCollider>().bounds.size.x / 2;
         MyState = BulletState.Pull;
         BeginPos = transform.position;
     }
@@ -22,6 +24,7 @@ public class BulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         switch (MyState)
         {
             case BulletState.Pull:
@@ -53,6 +56,23 @@ public class BulletController : MonoBehaviour
                 break;
         }
     }
+    private void FixedUpdate()
+    {
+        if (MyState == BulletState.Fly)
+        {
+            _checkNextFrame();
+        }
+    }
+    void _checkNextFrame()
+    {
+        Vector3 NextFramesPos = PosByTimes(Times + Time.fixedDeltaTime * FramesBeforeCollide, BeginPos, Velocity);
+        if (Physics.CheckSphere(NextFramesPos,ColliderRadius))
+        {
+            Debug.Log("Collider after " + FramesBeforeCollide + " frame");
+        }
+        
+    }
+
     void GetVelocity()
     {
         EndPos = Input.mousePosition;

@@ -162,6 +162,7 @@ MonoBehaviour:
   BeginPos: {x: 0, y: 0, z: 0}
   Velocity: {x: 0, y: 0, z: 0}
   Times: 0
+  FramesBeforeCollide: 5
   DestroyEffect: {fileID: 3535185335401777690, guid: 1d82f44aa1db5014d9c1e08e1d663707, type: 3}
   BulletLine: {fileID: 1022509136}
 --- !u!54 &213558484
@@ -852,11 +853,6 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   BulletLine: {fileID: 1022509138}
-  Butllet: {fileID: 213558482}
-  moveByTime: {fileID: 213558483}
-  MouseDownPos: {x: 0, y: 0, z: 0}
-  MouseUpPos: {x: 0, y: 0, z: 0}
-  Velocity: {x: 0, y: 0, z: 0}
   PointTime: 0.2
 --- !u!4 &1022509137
 Transform:
