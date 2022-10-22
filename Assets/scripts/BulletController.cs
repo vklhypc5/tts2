@@ -35,7 +35,6 @@ public class BulletController : MonoBehaviour
                 if (Input.GetMouseButtonUp(0))
                 {
                     GetVelocity();
-                    Velocity = (StartPos - EndPos) / 10;
                     MyState = BulletState.Fly;
                 }
                 if (Input.GetMouseButton(0))
@@ -68,21 +67,34 @@ public class BulletController : MonoBehaviour
         Vector3 NextFramesPos = PosByTimes(Times + Time.fixedDeltaTime * FramesBeforeCollide, BeginPos, Velocity);
         if (Physics.CheckSphere(NextFramesPos,ColliderRadius))
         {
-            Debug.Log("Collider after " + FramesBeforeCollide + " frame");
+            //Debug.Log("Collider after " + FramesBeforeCollide + " frame");
         }
         
     }
+    void ResetTrajectory(Vector3 velocity)
+    {
+        BeginPos = transform.position;
+        Velocity = velocity;
+        Times = 0;
 
+    }
     void GetVelocity()
     {
         EndPos = Input.mousePosition;
-        Velocity = (StartPos - EndPos) / 10;
+        Velocity = (EndPos-StartPos) / 10;
+        Velocity.z = -Velocity.x;
+        Velocity.x = Velocity.y;
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
             MyState = BulletState.StandStill;
+        }
+        if (collision.gameObject.tag == "cube")
+        {
+            Instantiate(DestroyEffect, transform.position, Quaternion.identity);
+            manager.Instance.AddPoint();
         }
         if (collision.gameObject.tag == "cube")
         {

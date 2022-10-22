@@ -7,11 +7,13 @@ public class LineRender : MonoBehaviour
     [SerializeField] private Vector3[] LinePoints;
     [SerializeField] private LineRenderer BulletLine;
     [SerializeField] private float PointTime;
+    [SerializeField] private GameObject Droppoint;
     private Vector3 Gravity = new Vector3(0, -10, 0);
+    private float DropPointRadius;
     // Start is called before the first frame update
     void Start()
     {
-        
+        DropPointRadius = Droppoint.GetComponent<Collider>().bounds.size.z / 2;
     }
 
     // Update is called once per frame
@@ -27,11 +29,30 @@ public class LineRender : MonoBehaviour
     public void DrawLine(Vector3 _BeginPos, Vector3 velocity)
     {
         float time = 0;
+        bool StopDropPoint = false;
         for(int j = 0; j < LinePoints.Length; j++)
         {
             LinePoints[j]= Gravity * time * time + velocity * time + _BeginPos;
             time += PointTime;
+            if (j > 3 && CheckDropPoint(LinePoints[j],DropPointRadius)  && !StopDropPoint)
+            {
+                Droppoint.transform.position = LinePoints[j-1];
+                StopDropPoint = true;
+            }
         }
         BulletLine.SetPositions(LinePoints);
+    }
+    bool CheckDropPoint(Vector3 CastPoint,float radius)
+    {
+        Collider[] colliders = Physics.OverlapSphere(CastPoint, radius);
+        bool hit = false;
+        foreach(Collider collider in colliders)
+        {
+            if (collider.gameObject.tag != "Player")
+            {
+                hit=true;
+            }
+        }
+        return hit;
     }
 }

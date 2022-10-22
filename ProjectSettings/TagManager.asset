@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Ground
   - cube
+  - wall
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - player
   - Water
   - UI
   - 
