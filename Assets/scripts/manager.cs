@@ -5,7 +5,7 @@ using TMPro;
 
 public class manager : MonoBehaviour
 {
-    public enum GameState {Playing,Start,ReStart}
+    public enum GameState {Playing,Start}
     public GameState gameState;
     [Header("UI")]
     public static manager Instance;

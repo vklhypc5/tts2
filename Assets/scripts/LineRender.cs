@@ -23,7 +23,7 @@ public class LineRender : MonoBehaviour
     }
     public Vector3 PosByTimes(float time, Vector3 _BeginPos, Vector3 velocity)
     {
-        Vector3 pos = new Vector3(0, -10, 0) * time * time + velocity * time + _BeginPos;
+        Vector3 pos = new Vector3(0, -10, 0) * time * time/2 + velocity * time + _BeginPos;
         return pos;
     }
     public void DrawLine(Vector3 _BeginPos, Vector3 velocity)
@@ -32,7 +32,7 @@ public class LineRender : MonoBehaviour
         bool StopDropPoint = false;
         for(int j = 0; j < LinePoints.Length; j++)
         {
-            LinePoints[j]= Gravity * time * time + velocity * time + _BeginPos;
+            LinePoints[j]= PosByTimes(time,_BeginPos,velocity);
             time += PointTime;
             if (j > 3 && CheckDropPoint(LinePoints[j],DropPointRadius)  && !StopDropPoint)
             {

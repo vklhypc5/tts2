@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - cube
   - wall
+  - outofgame
+  - tennisball
   layers:
   - Default
   - TransparentFX
