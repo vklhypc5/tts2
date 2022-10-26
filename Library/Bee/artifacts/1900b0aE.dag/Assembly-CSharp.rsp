@@ -359,6 +359,7 @@
 "Assets/scripts/BulletController.cs"
 "Assets/scripts/CameraFollow.cs"
 "Assets/scripts/cubemove.cs"
+"Assets/scripts/GameLogic.cs"
 "Assets/scripts/LineRender.cs"
 "Assets/scripts/manager.cs"
 "Assets/scripts/PlayerMove.cs"

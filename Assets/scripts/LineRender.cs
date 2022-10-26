@@ -7,7 +7,7 @@ public class LineRender : MonoBehaviour
     [SerializeField] private Vector3[] LinePoints;
     [SerializeField] private LineRenderer BulletLine;
     [SerializeField] private float PointTime;
-    [SerializeField] private GameObject Droppoint;
+    [SerializeField] private GameObject Droppoint,StartDrawPoint;
     private Vector3 Gravity = new Vector3(0, -10, 0);
     private float DropPointRadius;
     // Start is called before the first frame update
@@ -32,7 +32,7 @@ public class LineRender : MonoBehaviour
         bool StopDropPoint = false;
         for(int j = 0; j < LinePoints.Length; j++)
         {
-            LinePoints[j]= PosByTimes(time,_BeginPos,velocity);
+            LinePoints[j]= PosByTimes(time,StartDrawPoint.transform.position,velocity);
             time += PointTime;
             if (j > 3 && CheckDropPoint(LinePoints[j],DropPointRadius)  && !StopDropPoint)
             {

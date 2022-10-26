@@ -20,13 +20,12 @@ public class BulletController : MonoBehaviour
         MyState = BulletState.Pull;
         BeginPos = transform.position;
         AwakePos = BeginPos;
-        ScreenSizePerWorldSize = 10;
+        ScreenSizePerWorldSize = manager.Instance.ScreenSIzePerWorldSize;
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (Input.GetMouseButtonDown(0))
         {
             StartPos = Input.mousePosition;
@@ -60,7 +59,7 @@ public class BulletController : MonoBehaviour
                         PlayerHit(Velocity);
                     }
                 }
-                Times += 2 * Time.deltaTime;
+                Times += 1.5f * Time.deltaTime;
                 transform.position = PosByTimes(Times, BeginPos, Velocity);
                 break;
             case BulletState.StandStill:
@@ -116,7 +115,7 @@ public class BulletController : MonoBehaviour
         Velocity.y = Velocity.y + Times * Gravity.y;
         ResetTrajectory();
     }
-    public void PlayerHit(Vector3 velocity)
+    void PlayerHit(Vector3 velocity)
     {
         GetVelocity();
         MyState = BulletState.Fly;
