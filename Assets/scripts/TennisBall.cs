@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletController : MonoBehaviour
+public class TennisBall : MonoBehaviour
 {
     public enum BulletState {Pull,Fly,StandStill}
     [SerializeField] private BulletState MyState;
     [SerializeField] private Vector3 StartPos, EndPos, BeginPos,AwakePos;
     [SerializeField] private Vector3 Velocity,DrawVelocity;
-    [SerializeField] private float Times,FramesBeforeCollide,ScreenSizePerWorldSize;
+    [SerializeField] private float Times,FramesBeforeCollide,ScreenSizePerWorldSize,Friction;
     [SerializeField] private GameObject DestroyEffect;
     [SerializeField] private LineRender BulletLine;
+    [SerializeField] private bool HitGround1Time;
     private Vector3 Gravity= new Vector3(0,-10,0);
     private float ColliderRadius;
     // Start is called before the first frame update
@@ -65,6 +66,7 @@ public class BulletController : MonoBehaviour
             case BulletState.StandStill:
                 transform.position = AwakePos;
                 Times = 0;
+                manager.Instance.ResetPoint();
                 MyState = BulletState.Pull;
                 BeginPos = AwakePos;
                 break;
@@ -109,21 +111,36 @@ public class BulletController : MonoBehaviour
         Velocity.z = -Velocity.x;
         Velocity.x = Velocity.y;
     }
-    void HitWall()
-    {
-        Velocity.x = -(Velocity).x;
-        Velocity.y = Velocity.y + Times * Gravity.y;
-        ResetTrajectory();
-    }
     void PlayerHit(Vector3 velocity)
     {
         GetVelocity();
         MyState = BulletState.Fly;
+        HitGround1Time = false;
+        ResetTrajectory();
+    }
+    void HitWall()
+    {
+        Velocity.x = -(Velocity).x;
+        Velocity.y = Velocity.y + Times * Gravity.y;
+        HitGround1Time = false;
+        manager.Instance.AddPoint();
+        ResetTrajectory();
+    }
+    void HitSideWall()
+    {
+        Velocity.z = -(Velocity + Gravity * Times).z * Friction;
+        Velocity.y = Velocity.y + Times * Gravity.y;
         ResetTrajectory();
     }
     void HitGround()
     {
-        Velocity.y = -(Velocity + Gravity * Times).y;
+        if (HitGround1Time)
+        {
+            ResetTurn("Hit ground 2 time");
+            return;
+        }
+        HitGround1Time = true;
+        Velocity.y = -(Velocity + Gravity * Times).y*Friction;
         ResetTrajectory();
     }
     private void OnCollisionEnter(Collision collision)
@@ -142,9 +159,13 @@ public class BulletController : MonoBehaviour
         {
             HitWall();
         }
+        if (collision.gameObject.tag == "sidewall")
+        {
+            HitSideWall();
+        }
         if (collision.gameObject.tag == "outofgame")
         {
-            MyState = BulletState.StandStill;
+            ResetTurn("Ball out of map");
         }
     }
     public Vector3 PosByTimes(float time,Vector3 _BeginPos,Vector3 velocity)
@@ -156,5 +177,11 @@ public class BulletController : MonoBehaviour
     {
         BeginPos = transform.position;
         Times = 0;
+    }
+    private void ResetTurn(string alarmText)
+    {
+        HitGround1Time = false;
+        MyState = BulletState.StandStill;
+        manager.Instance.SetAlarmText(alarmText);
     }
 }

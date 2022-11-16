@@ -8,7 +8,6 @@ public class LineRender : MonoBehaviour
     [SerializeField] private LineRenderer BulletLine;
     [SerializeField] private float PointTime;
     [SerializeField] private GameObject Droppoint,StartDrawPoint;
-    private Vector3 Gravity = new Vector3(0, -10, 0);
     private float DropPointRadius;
     // Start is called before the first frame update
     void Start()

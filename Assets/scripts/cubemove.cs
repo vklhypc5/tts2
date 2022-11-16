@@ -28,7 +28,7 @@ public class cubemove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            manager.Instance.CreatNewCube();
+            //manager.Instance.CreatNewCube();
             Destroy(this.gameObject);
             
         }

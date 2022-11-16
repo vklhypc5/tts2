@@ -11,7 +11,7 @@ public class manager : MonoBehaviour
     public Transform DrawPoint;
     [Header("UI")]
     public static manager Instance;
-    [SerializeField] private TextMeshProUGUI PointText;
+    [SerializeField] private TextMeshProUGUI PointText,AlarmText;
     public float Point;
     [SerializeField] private GameObject Cube;
     // Start is called before the first frame update
@@ -20,24 +20,25 @@ public class manager : MonoBehaviour
         Instance = this;
         Point = 0;
     }
-    void Start()
-    {
-        Instance = this;
-        Point = 0;
-    }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void CreatNewCube()
-    {
-        Instantiate(Cube);
-    }
     public void AddPoint()
     {
         Point += 1;
         PointText.text = "Point: " + Point;
+    }
+    public void ResetPoint()
+    {
+        Point = 0;
+        PointText.text = "Point: " + Point;
+    }
+    public void SetAlarmText(string text)
+    {
+        AlarmText.text = text;
+        Invoke(nameof(ResetAlarmText),5f);
+    }
+    private void ResetAlarmText()
+    {
+        AlarmText.text = "";
     }
 }

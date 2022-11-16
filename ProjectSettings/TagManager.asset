@@ -9,6 +9,7 @@ TagManager:
   - wall
   - outofgame
   - tennisball
+  - sidewall
   layers:
   - Default
   - TransparentFX
