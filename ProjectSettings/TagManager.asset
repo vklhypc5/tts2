@@ -10,6 +10,7 @@ TagManager:
   - outofgame
   - tennisball
   - sidewall
+  - luoi
   layers:
   - Default
   - TransparentFX

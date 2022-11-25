@@ -6,8 +6,8 @@ public class LineRender : MonoBehaviour
 {
     [SerializeField] private Vector3[] LinePoints;
     [SerializeField] private LineRenderer BulletLine;
-    [SerializeField] private float PointTime;
-    [SerializeField] private GameObject Droppoint,StartDrawPoint;
+    public float PointTime,timer,timeDrop;
+    public GameObject Droppoint,StartDrawPoint;
     private float DropPointRadius;
     // Start is called before the first frame update
     void Start()
@@ -15,28 +15,19 @@ public class LineRender : MonoBehaviour
         DropPointRadius = Droppoint.GetComponent<Collider>().bounds.size.z / 2;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
-    public Vector3 PosByTimes(float time, Vector3 _BeginPos, Vector3 velocity)
-    {
-        Vector3 pos = new Vector3(0, -10, 0) * time * time/2 + velocity * time + _BeginPos;
-        return pos;
-    }
     public void DrawLine(Vector3 _BeginPos, Vector3 velocity)
     {
-        float time = 0;
+        timer = 0;
         bool StopDropPoint = false;
         for(int j = 0; j < LinePoints.Length; j++)
         {
-            LinePoints[j]= PosByTimes(time,StartDrawPoint.transform.position,velocity);
-            time += PointTime;
+            LinePoints[j]= manager.Instance.PosByTimes(timer,_BeginPos,velocity);
+            timer += PointTime;
             if (j > 3 && CheckDropPoint(LinePoints[j],DropPointRadius)  && !StopDropPoint)
             {
                 Droppoint.transform.position = LinePoints[j-1];
                 StopDropPoint = true;
+                timeDrop = timer;
             }
         }
         BulletLine.SetPositions(LinePoints);
