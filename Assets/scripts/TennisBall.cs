@@ -5,7 +5,7 @@ using UnityEngine;
 public class TennisBall : MonoBehaviour
 {
     public enum TennisState {Pull,Fly,StandStill}
-    [SerializeField] private TennisState MyState;
+    [SerializeField] public TennisState MyState;
     [SerializeField] private Vector3 BeginPos,AwakePos;
     [SerializeField] private Vector3 Velocity,DrawVelocity;
     [SerializeField] private float Times, Friction;
@@ -33,12 +33,12 @@ public class TennisBall : MonoBehaviour
             case TennisState.StandStill:
                 transform.position = AwakePos;
                 Times = 0;
-                manager.Instance.ResetPoint();
                 MyState = TennisState.Pull;
                 BeginPos = AwakePos;
                 break;
         }
     }
+    //bot and player can also hit tennis but with their tranform and distance to hit 
     public void PlayerHit(Transform player,Vector3 velocity,float hitDistance)
     {
         if(MyState == TennisState.Pull || MyState == TennisState.Fly)
@@ -50,6 +50,7 @@ public class TennisBall : MonoBehaviour
             }
         }
     }
+    //bot and player can also hit tennis but with their tranform and distance to hit 
     public bool AbleToHit(Transform player,float hitDistance)
     {
         bool hit = false;
@@ -69,7 +70,6 @@ public class TennisBall : MonoBehaviour
     {
         Velocity.x = -(Velocity).x;
         Velocity.y = Velocity.y + Times * manager.Instance.Gravity.y;
-        manager.Instance.AddPoint();
         ResetTrajectory();
     }
     void HitSideWall()
@@ -90,14 +90,6 @@ public class TennisBall : MonoBehaviour
         {
             HitGround();
         }
-        //if (collision.gameObject.tag == "wall")
-        //{
-        //    HitWall();
-        //}
-        //if (collision.gameObject.tag == "sidewall")
-        //{
-        //    HitSideWall();
-        //}
         if (collision.gameObject.tag == "outofgame")
         {
             ResetTurn();

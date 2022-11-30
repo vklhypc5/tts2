@@ -11,29 +11,18 @@ public class manager : MonoBehaviour
     public Transform DrawPoint;
     [Header("UI")]
     public static manager Instance;
-    [SerializeField] private TextMeshProUGUI PointText,AlarmText;
+    [SerializeField] private TextMeshProUGUI AlarmText;
     public float Point;
     [SerializeField] private GameObject Cube;
     public float tennisSpeddModifie;
     public Vector3 Gravity = new Vector3(0, -2.5f, 0);
     [SerializeField] protected TennisBall tennisBall;
+    [SerializeField] RoundManager roundManager;
     // Start is called before the first frame update
     private void Awake()
     {
         Instance = this;
         Point = 0;
-    }
-
-    // Update is called once per frame
-    public void AddPoint()
-    {
-        Point += 1;
-        PointText.text = "Point: " + Point;
-    }
-    public void ResetPoint()
-    {
-        Point = 0;
-        PointText.text = "Point: " + Point;
     }
     public void SetAlarmText(string text)
     {
@@ -54,10 +43,12 @@ public class manager : MonoBehaviour
     {
         SetAlarmText("Player Win");
         tennisBall.ResetTurn();
+        roundManager.AddPointPlayer();
     }
     public void BotWin()
     {
         SetAlarmText("Bot Win");
         tennisBall.ResetTurn();
+        roundManager.AddPointBot();
     }
 }

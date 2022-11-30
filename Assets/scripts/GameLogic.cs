@@ -19,11 +19,12 @@ public class GameLogic : MonoBehaviour
     {
         
     }
-    public void BallHitGround(Vector3 pos)
+    public void BallHitGround(Vector3 pos)//called every time tennis hit ground
     {
+        // 0 is midle of x axis
         if (turn == Turn.Player)
         {
-            if (pos.x < 0)
+            if (pos.x < 0)//player hit owner 
             {
                 manager.Instance.BotWin();
             }
@@ -38,7 +39,7 @@ public class GameLogic : MonoBehaviour
         }
         if (turn == Turn.Bot)
         {
-            if (pos.x > 0)
+            if (pos.x > 0)//bot his owner
             {
                 manager.Instance.PlayerWin();
             }
@@ -60,11 +61,25 @@ public class GameLogic : MonoBehaviour
     {
         if (turn == Turn.Player)
         {
-            manager.Instance.BotWin();
+            if (HitGround1stTime)
+            {
+                manager.Instance.PlayerWin();
+            }
+            else
+            {
+                manager.Instance.BotWin();
+            }           
         }
         if (turn == Turn.Bot)
         {
-            manager.Instance.PlayerWin();
+            if (HitGround1stTime)
+            {
+                manager.Instance.BotWin();
+            }
+            else
+            {
+                manager.Instance.PlayerWin();
+            }
         }
         NewTurn();
     }
