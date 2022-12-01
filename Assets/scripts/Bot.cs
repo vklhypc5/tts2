@@ -1,21 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class Bot : MonoBehaviour
 {
+    /*easy mode:bot always hit tennis with same speed;
+     * hard mode: bot hit tennis with caculate speed
+     */
     public bool isHard;
-    [SerializeField] float Speed,percentToGotoPos;// speed and how fast bot react to the player hit tennis
+    [SerializeField] float Speed;// speed 
     [SerializeField] private TennisBall tennis;
     [SerializeField] Vector3 tennisSpeed;//tennis speed for easy mode
     [SerializeField] Vector3 BeginPos;// beginpos of bot
     [SerializeField] Vector3 targetPos;//alway go to this pos (for moving the bot)
-    public bool gotoZaxis, gotoPos;//bot has 2 state gotozaxis is go to the positon with z=dropoint.z,gotopos is go to the drp point
+    public bool gotoPos;//gotopos is go to the drop point
     public Vector3 dropPoint;//get drop point when player hit tennis
     [SerializeField] public float dropTime;//get drop time for caculate
     [SerializeField] float timer;//just a cowndown
     [SerializeField] float distanceToHit;
     [SerializeField] protected Transform player;
+    [SerializeField] protected TextMeshProUGUI hardText;
+    [SerializeField] Vector3 mapsize;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,16 +34,15 @@ public class Bot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate((targetPos - transform.position).normalized * Speed * Time.deltaTime);
+        if (Vector3.Distance(transform.position, targetPos) > 0.05f)
+        {
+            transform.Translate((targetPos - transform.position).normalized * Speed * Time.deltaTime);
+        }
         if (gotoPos)//2nd state
         {
             MoveToPos(dropPoint);
         }
-        if (gotoZaxis)//1st state
-        {
-            MoveToZAxis(dropPoint);
-        }
-        if (!gotoPos && !gotoZaxis)
+        if (!gotoPos)
         {
             SetTargetPos(BeginPos);// if not in 1st or 2nd state go back to begin pos
         }
@@ -45,18 +51,24 @@ public class Bot : MonoBehaviour
             hit();//hit when tennis in range
         }
         timer -= 1 * Time.deltaTime;    
-        if(timer<0 && gotoPos == false)
-        {
-            //chane from 1st state to 2nd state
-            gotoPos = true;
-            gotoZaxis = false;
-        }
         if (timer < -dropTime * manager.Instance.tennisSpeddModifie)
         {
             //go back to begin pos when dont hit tennis
             targetPos = BeginPos;
             gotoPos = false;
-            gotoZaxis = false;
+        }
+    }
+    public void Hard()
+    {
+        if (isHard)
+        {
+            isHard = false;
+            hardText.text = "easy";
+        }
+        else
+        {
+            isHard = true;
+            hardText.text = "hard";
         }
     }
     void MoveToZAxis(Vector3 target)
@@ -70,24 +82,21 @@ public class Bot : MonoBehaviour
     }
     public void GetInfo()
     {
-        gotoZaxis = true;
+        gotoPos = true;
         dropPoint += Vector3.right * 15;//bot go back 15 distance
-        //bot.gotoXaxis = true;
-        timer = dropTime*(100-percentToGotoPos)/100;
     }
     void hit()
     {
         if (isHard)//hard mode on
         {
             CaculateTennisSpeed(player.transform.position);
-            tennis.PlayerHit(this.transform, tennisSpeed, distanceToHit);
+            tennis.PlayerHit(this.transform, CaculateTennisSpeed(player.transform.position), distanceToHit);
         }
         if (!isHard)//easy mode (alway hit tenins with same velocity)
         {
             tennis.PlayerHit(this.transform, tennisSpeed, distanceToHit);
         }
         gotoPos = false;
-        gotoZaxis = false;
         timer = 999;
         GameLogic.Instance.BotHit();
     }
@@ -99,7 +108,21 @@ public class Bot : MonoBehaviour
     Vector3 CaculateTennisSpeed(Vector3 playerPos)//caculate for hard mode
     {
         Vector3 speed = Vector3.zero;
-        Debug.Log(playerPos);
+        //x axis
+        speed.x = -((transform.position.x) / 2f + (playerPos.x+mapsize.x)/2);
+        //y axis
+        speed.y = 12 + Random.Range(-1, 1);
+        //z axis
+        float delta = mapsize.z - Mathf.Abs(transform.position.z);
+        if (transform.position.z * playerPos.z > 0)
+        {
+            speed.z = Random.Range(delta, -delta) / 2 - playerPos.z;
+        }
+        else
+        {
+            speed.z = Random.Range(delta, -delta) / 2;
+        }
+
         return speed;
     }
 }
